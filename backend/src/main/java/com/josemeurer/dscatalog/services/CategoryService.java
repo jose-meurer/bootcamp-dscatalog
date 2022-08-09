@@ -1,6 +1,5 @@
 package com.josemeurer.dscatalog.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -8,6 +7,8 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +25,9 @@ public class CategoryService {
 	private CategoryRepository repository;
 	
 	@Transactional(readOnly = true) //Atencao, anotacao do Spring, e nao javax;
-	public List<CategoryDTO> findall() {
-		List<Category> list = repository.findAll();
-		return list.stream().map(x -> new CategoryDTO(x)).toList();
+	public Page<CategoryDTO> findAllPaged(PageRequest pageRequest) {
+		Page<Category> list = repository.findAll(pageRequest);
+		return list.map(x -> new CategoryDTO(x));
 	}
 
 	@Transactional(readOnly = true)
@@ -57,7 +58,7 @@ public class CategoryService {
 		}
 	}
 
-	public void delete(Long id) {
+	public void delete(Long id) { //Nao usar transactional em delete, para poder recuperar exception do banco;
 		try {
 		repository.deleteById(id);
 		}
