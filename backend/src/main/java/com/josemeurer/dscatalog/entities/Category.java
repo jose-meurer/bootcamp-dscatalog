@@ -1,12 +1,16 @@
 package com.josemeurer.dscatalog.entities;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 @Entity
@@ -18,6 +22,12 @@ public class Category implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
+	
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") //Salva no banco como padrao UTC;
+	private Instant createdAt;
+	
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+	private Instant updateAt;
 	
 	public Category() {
 	}
@@ -42,6 +52,24 @@ public class Category implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public Instant getCreatedAt() {
+		return createdAt;
+	}
+
+	public Instant getUpdateAt() {
+		return updateAt;
+	}
+	
+	@PrePersist //anotacao da jpa, quando for criado, ele irá executar este metodo;
+	public void prePersist() {
+		createdAt = Instant.now();
+	}
+	
+	@PreUpdate //e este, sempre que der um update na jpa, irá executar;
+	public void preUpdate() {
+		updateAt = Instant.now();
+	}
 
 	@Override
 	public int hashCode() {
@@ -59,6 +87,4 @@ public class Category implements Serializable{
 		Category other = (Category) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
 }
