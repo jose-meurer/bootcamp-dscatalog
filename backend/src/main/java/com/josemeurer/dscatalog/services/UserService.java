@@ -9,10 +9,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.josemeurer.dscatalog.dto.UserDTO;
+import com.josemeurer.dscatalog.dto.UserInsertDTO;
 import com.josemeurer.dscatalog.entities.User;
 import com.josemeurer.dscatalog.repositories.RoleRepository;
 import com.josemeurer.dscatalog.repositories.UserRepository;
@@ -22,6 +24,9 @@ import com.josemeurer.dscatalog.services.exceptions.ResourceNotFoundException;
 @Service
 public class UserService {
 
+	@Autowired
+	private BCryptPasswordEncoder bCrypt;
+	
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -42,9 +47,10 @@ public class UserService {
 	}
 	
 	@Transactional
-	public UserDTO insert(UserDTO dto) {
+	public UserDTO insert(UserInsertDTO dto) {
 		User entity = new User();
 		dtoToEntity(dto, entity);
+		entity.setPassword(bCrypt.encode(dto.getPassword())); //Transaforma a senha em hash;
 		entity = userRepository.save(entity);
 		return new UserDTO(entity);
 	}
@@ -63,6 +69,7 @@ public class UserService {
 	}
 	
 	public void delete(Long id) {
+		
 		try {
 			userRepository.deleteById(id);
 		}
