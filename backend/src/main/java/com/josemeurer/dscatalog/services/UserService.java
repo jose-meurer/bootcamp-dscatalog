@@ -1,9 +1,13 @@
 package com.josemeurer.dscatalog.services;
 
-import java.util.Optional;
-
-import javax.persistence.EntityNotFoundException;
-
+import com.josemeurer.dscatalog.dto.UserDTO;
+import com.josemeurer.dscatalog.dto.UserInsertDTO;
+import com.josemeurer.dscatalog.dto.UserUpdateDTO;
+import com.josemeurer.dscatalog.entities.User;
+import com.josemeurer.dscatalog.repositories.RoleRepository;
+import com.josemeurer.dscatalog.repositories.UserRepository;
+import com.josemeurer.dscatalog.services.exceptions.DatabaseException;
+import com.josemeurer.dscatalog.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -13,13 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.josemeurer.dscatalog.dto.UserDTO;
-import com.josemeurer.dscatalog.dto.UserInsertDTO;
-import com.josemeurer.dscatalog.entities.User;
-import com.josemeurer.dscatalog.repositories.RoleRepository;
-import com.josemeurer.dscatalog.repositories.UserRepository;
-import com.josemeurer.dscatalog.services.exceptions.DatabaseException;
-import com.josemeurer.dscatalog.services.exceptions.ResourceNotFoundException;
+import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -56,7 +55,7 @@ public class UserService {
 	}
 	
 	@Transactional
-	public UserDTO update(Long id, UserDTO dto) {
+	public UserDTO update(Long id, UserUpdateDTO dto) {
 		try {
 			User entity = userRepository.getOne(id);
 			dtoToEntity(dto, entity);
