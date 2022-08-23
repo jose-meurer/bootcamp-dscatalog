@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Override
-	@Bean  //Quando for implementar o authorizationServer eu vou precisar deste bean
+	@Bean  //Precisa declarar explicitamente para poder usar como bean
 	protected AuthenticationManager authenticationManager() throws Exception {
 		return super.authenticationManager();
 	}
