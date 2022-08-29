@@ -47,9 +47,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception { //Oauth2
-        //https://www.linkedin.com/pulse/spring-boot-oauth2-securing-rest-api-abid-anjum/
-        //https://docs.spring.io/spring-security/oauth/apidocs/org/springframework/security/oauth2/config/annotation/web/configuration/AuthorizationServerConfigurerAdapter.html
-        security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()"); //Duvida aqui
+
+        /* O Spring security oauth expõe dois endpoints para verificação de tokens
+         * ( /oauth/check_token e /oauth/token_key) que são protegidos por padrão por trás do denyAll().
+         * Os métodos tokenKeyAccess() e checkTokenAccess() abrem esses terminais para uso.
+         * https://howtodoinjava.com/spring-boot2/oauth2-auth-server/
+        */
+
+        security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
     }
 
     @Override //Credenciais da aplicacao
