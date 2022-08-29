@@ -1,6 +1,7 @@
 package com.josemeurer.dscatalog.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,6 +16,15 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @Configuration
 @EnableAuthorizationServer //Fala pro sistema que essa classe é o authorization server
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter { //Spring Oauth2
+
+    @Value("${security.oauth2.client.client-id}")   //app.properties
+    private String clientId;
+
+    @Value("${security.oauth2.client.client-secret}")   //app.properties
+    private String clientSecret;
+
+    @Value("${jwt.duration}")   //app.properties
+    private Integer jwtDuration;
 
     @Autowired
     private BCryptPasswordEncoder bCrypt;
@@ -38,11 +48,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override //Credenciais da aplicacao
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception { //Oauth2
         clients.inMemory() //Processo vai ser feito em memoria
-                .withClient("dscatalog") //Id da aplicacao, id da solicitacao do front precisa dar match com essa
-                .secret(bCrypt.encode("ç123")) //Client secret, senha da aplicacao
+                .withClient(clientId) //Id da aplicacao, id da solicitacao do front precisa dar match com essa
+                .secret(bCrypt.encode(clientSecret)) //Client secret, senha da aplicacao
                 .scopes("read", "write") //Permissoes de acesso
                 .authorizedGrantTypes("password") //Padrao do Oauth
-                .accessTokenValiditySeconds(86401); //Tempo valido do token em segundos
+                .accessTokenValiditySeconds(jwtDuration); //Tempo valido do token em segundos
     }
 
     @Override

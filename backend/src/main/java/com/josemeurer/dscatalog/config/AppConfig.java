@@ -1,5 +1,6 @@
 package com.josemeurer.dscatalog.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -8,6 +9,9 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 @Configuration
 public class AppConfig {
+
+	@Value("${jwt.secret}") //app.properties
+	private String jwtSecret;
 
 	@Bean
 	BCryptPasswordEncoder passwordEncoder( ) {
@@ -18,7 +22,7 @@ public class AppConfig {
 	@Bean //Assinatura do meu token
 	public JwtAccessTokenConverter accessTokenConverter() { //Token jwt
 		JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
-		tokenConverter.setSigningKey("MY-JWT-SECRET"); //Tirar hardcode e por no properties
+		tokenConverter.setSigningKey(jwtSecret);
 		return tokenConverter;
 	}
 
