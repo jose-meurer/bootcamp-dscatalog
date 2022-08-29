@@ -13,7 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter { //Spring Security
 
 	@Autowired
 	private BCryptPasswordEncoder bCrypt;
@@ -21,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
-	@Override
+	@Override //Spring Security
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 //		super.configure(auth);
 
@@ -29,14 +29,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCrypt);
 	}
 
-	@Override 	//Faz o security ignorar os endpoints passando pela biblioteca do Oauth;
-	public void configure(WebSecurity web) throws Exception {
+	@Override 	//Faz o security ignorar os endpoints passando pela biblioteca do Spring cloud Oauth;
+	public void configure(WebSecurity web) throws Exception { //Spring Security
 		web.ignoring().antMatchers("/actuator/**");
 	}
 
 	@Override
 	@Bean  //Precisa declarar explicitamente para poder usar como bean
-	protected AuthenticationManager authenticationManager() throws Exception {
+	protected AuthenticationManager authenticationManager() throws Exception { //Spring Security
 		return super.authenticationManager();
 	}
 }

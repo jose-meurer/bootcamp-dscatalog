@@ -16,14 +16,14 @@ public class AppConfig {
 
 	//Poderia colocar os beans do jwt em um pasta só para security
 	@Bean //Assinatura do meu token
-	public JwtAccessTokenConverter accessTokenConverter() {
+	public JwtAccessTokenConverter accessTokenConverter() { //Token jwt
 		JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
 		tokenConverter.setSigningKey("MY-JWT-SECRET"); //Tirar hardcode e por no properties
 		return tokenConverter;
 	}
 
 	@Bean //Beans necessarios para implementar o authorization server
-	public JwtTokenStore tokenStore() {
+	public JwtTokenStore tokenStore() { //Token jwt
 		return new JwtTokenStore(accessTokenConverter());
 	}
 }

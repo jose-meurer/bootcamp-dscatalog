@@ -97,7 +97,7 @@ public class UserService implements UserDetailsService {
 				.add(roleRepository.getOne(x.getId())));
 	}
 
-	@Override
+	@Override //Spring Security
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
 		User entity = userRepository.findByEmail(username);

@@ -108,32 +108,32 @@ public class User implements UserDetails, Serializable{
 		return Objects.equals(id, other.id);
 	}
 
-	@Override
+	@Override //Spring Security
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return roles.stream().map(x -> new SimpleGrantedAuthority(x.getAuthority())).toList();
 	}
 
-	@Override
+	@Override //Spring Security
 	public String getUsername() {
 		return email;
 	}
 
-	@Override
+	@Override //Spring Security
 	public boolean isAccountNonExpired() {
 		return true;
 	}
 
-	@Override
+	@Override //Spring Security
 	public boolean isAccountNonLocked() {
 		return true;
 	}
 
-	@Override
+	@Override //Spring Security
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
 
-	@Override
+	@Override //Spring Security
 	public boolean isEnabled() {
 		return true;
 	}

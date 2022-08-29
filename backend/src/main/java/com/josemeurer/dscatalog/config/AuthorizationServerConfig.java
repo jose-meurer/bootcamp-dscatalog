@@ -14,41 +14,41 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 @Configuration
 @EnableAuthorizationServer //Fala pro sistema que essa classe é o authorization server
-public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter { //Spring Oauth2
 
     @Autowired
     private BCryptPasswordEncoder bCrypt;
 
     @Autowired
-    private JwtAccessTokenConverter accessTokenConverter;
+    private JwtAccessTokenConverter accessTokenConverter; //AppConfig
 
     @Autowired
-    private JwtTokenStore tokenStore;
+    private JwtTokenStore tokenStore; //AppConfig
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager; //WebSecurityConfig
 
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception { //Oauth2
         //https://www.linkedin.com/pulse/spring-boot-oauth2-securing-rest-api-abid-anjum/
         //https://docs.spring.io/spring-security/oauth/apidocs/org/springframework/security/oauth2/config/annotation/web/configuration/AuthorizationServerConfigurerAdapter.html
-        security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
+        security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()"); //Duvida aqui
     }
 
     @Override //Credenciais da aplicacao
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception { //Oauth2
         clients.inMemory() //Processo vai ser feito em memoria
                 .withClient("dscatalog") //Id da aplicacao, id da solicitacao do front precisa dar match com essa
-                .secret(bCrypt.encode("ç123")) //Senha da aplicacao
+                .secret(bCrypt.encode("ç123")) //Client secret, senha da aplicacao
                 .scopes("read", "write") //Permissoes de acesso
                 .authorizedGrantTypes("password") //Padrao do Oauth
-                .accessTokenValiditySeconds(86400); //Tempo valido do token em segundos
+                .accessTokenValiditySeconds(86401); //Tempo valido do token em segundos
     }
 
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.authenticationManager(authenticationManager) //Criado no WebSecurityConfig
-                .tokenStore(tokenStore) //Criado no AppConfig
-                .accessTokenConverter(accessTokenConverter);
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception { //Oauth2
+        endpoints.authenticationManager(authenticationManager) //SpringSecurity que vai fazer a autenticacao
+                .tokenStore(tokenStore) //Responsavel por processar o token
+                .accessTokenConverter(accessTokenConverter); //Responsavel para converter o tokenos
     }
 }
