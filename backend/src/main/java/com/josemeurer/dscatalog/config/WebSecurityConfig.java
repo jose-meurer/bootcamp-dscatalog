@@ -22,7 +22,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter { //Spring S
 	private UserDetailsService userDetailsService;
 
 	@Override //Spring Security
-	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 //		super.configure(auth);
 
 		//Spring vai saber como buscar o email e como analisar a senha cryptografada

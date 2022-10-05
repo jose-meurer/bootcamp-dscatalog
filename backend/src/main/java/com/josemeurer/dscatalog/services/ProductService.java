@@ -1,9 +1,11 @@
 package com.josemeurer.dscatalog.services;
 
-import java.util.Optional;
-
-import javax.persistence.EntityNotFoundException;
-
+import com.josemeurer.dscatalog.dto.ProductDTO;
+import com.josemeurer.dscatalog.entities.Product;
+import com.josemeurer.dscatalog.repositories.CategoryRepository;
+import com.josemeurer.dscatalog.repositories.ProductRepository;
+import com.josemeurer.dscatalog.services.exceptions.DatabaseException;
+import com.josemeurer.dscatalog.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -12,12 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.josemeurer.dscatalog.dto.ProductDTO;
-import com.josemeurer.dscatalog.entities.Product;
-import com.josemeurer.dscatalog.repositories.CategoryRepository;
-import com.josemeurer.dscatalog.repositories.ProductRepository;
-import com.josemeurer.dscatalog.services.exceptions.DatabaseException;
-import com.josemeurer.dscatalog.services.exceptions.ResourceNotFoundException;
+import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -79,6 +77,7 @@ public class ProductService {
 		entity.setDescription(dto.getDescription());
 		entity.setPrice(dto.getPrice());
 		entity.setImgUrl(dto.getImgUrl());
+		entity.setDate(dto.getDate());
 
 		entity.getCategories().clear();
 		dto.getCategories().forEach(x -> entity.getCategories() //Fiz de outro jeito;

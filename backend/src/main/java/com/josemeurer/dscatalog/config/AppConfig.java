@@ -14,7 +14,7 @@ public class AppConfig {
 	private String jwtSecret;
 
 	@Bean
-	BCryptPasswordEncoder passwordEncoder( ) {
+	public BCryptPasswordEncoder passwordEncoder( ) {
 		return new BCryptPasswordEncoder();
 	}
 

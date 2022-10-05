@@ -1,18 +1,14 @@
 package com.josemeurer.dscatalog.dto;
 
+import com.josemeurer.dscatalog.entities.Category;
+import com.josemeurer.dscatalog.entities.Product;
+
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
-
-import com.josemeurer.dscatalog.entities.Category;
-import com.josemeurer.dscatalog.entities.Product;
 
 public class ProductDTO implements Serializable{
 private static final long serialVersionUID = 1L;
@@ -27,6 +23,7 @@ private static final long serialVersionUID = 1L;
 	private String description;
 	
 	@Positive(message = "Price must be a positive value")
+	@NotNull(message = "Required field")
 	private Double price;
 	private String imgUrl;
 	

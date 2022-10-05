@@ -45,8 +45,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(PUBLIC).permitAll() //Define as autorizaçoes
                 .antMatchers(HttpMethod.GET, OPERATOR_OR_ADMIN).permitAll() //Liberar o metodo get para todos
-                .antMatchers(OPERATOR_OR_ADMIN).hasAnyAuthority("OPERATOR", "ADMIN") //Pode acessar quem tiver roles
+                .antMatchers(OPERATOR_OR_ADMIN).hasAnyRole("ADMIN", "OPERATOR") //Pode acessar quem tiver roles
                 .antMatchers(ADMIN).hasRole("ADMIN") //Só pode acessar quem tiver role admin
-                .anyRequest().authenticated(); //Para acessar qualquer outra só precisa estar logado, nao imporanto o perfil de user
+                .anyRequest().authenticated(); //Para acessar qualquer outra só precisa estar logado, nao importando o perfil de user
     }
 }
