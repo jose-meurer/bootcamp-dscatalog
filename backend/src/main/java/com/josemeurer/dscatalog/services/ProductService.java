@@ -1,6 +1,7 @@
 package com.josemeurer.dscatalog.services;
 
 import com.josemeurer.dscatalog.dto.ProductDTO;
+import com.josemeurer.dscatalog.entities.Category;
 import com.josemeurer.dscatalog.entities.Product;
 import com.josemeurer.dscatalog.repositories.CategoryRepository;
 import com.josemeurer.dscatalog.repositories.ProductRepository;
@@ -27,8 +28,9 @@ public class ProductService {
 	private CategoryRepository catRepository;
 	
 	@Transactional(readOnly = true)
-	public Page<ProductDTO> findAllPaged(Pageable pageable) {
-		Page<Product> list = repository.findAll(pageable);
+	public Page<ProductDTO> findAllPaged(Long categoryId, Pageable pageable) {
+		Category category = (categoryId == 0) ? null : catRepository.getOne(categoryId);
+		Page<Product> list = repository.find(category, pageable);
 		return list.map(x -> new ProductDTO(x));
 	}
 
