@@ -1,5 +1,6 @@
 package com.josemeurer.dscatalog.resources;
 
+import com.josemeurer.dscatalog.tests.TokenUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,18 @@ public class ProductResourceIT {
 	
 	@Autowired
 	private ObjectMapper objMapper;
+
+	@Autowired
+	private TokenUtil tokenUtil;
 	
 	private long existingId;
 	private long nonExistingId;
 	private long countTotalProducts;
+
+	private String adminUsername;
+	private String adminPassword;
+	private String operatorUsername;
+	private String operatorPassword;
 	
 	@BeforeEach
 	void setUp() {
@@ -41,17 +50,26 @@ public class ProductResourceIT {
 		existingId = 1L;
 		nonExistingId = 1000L;
 		countTotalProducts = repository.count();
+
+		operatorUsername = "alex@gmail.com";
+		operatorPassword = "123456";
+
+		adminUsername = "maria@gmail.com";
+		adminPassword = "123456";
 		
 	}
 	
 	@Test
 	public void updateShouldReturnNotFoundWhenIdDoesNotExist() throws Exception{
-		
+
+		String accessToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
+
 		ProductDTO productDto = Factory.createProductDTO();
 		String jsonBody = objMapper.writeValueAsString(productDto);
 		
 		ResultActions result = 
 				mockMvc.perform(MockMvcRequestBuilders.put("/products/{id}", nonExistingId)
+						.header("Authorization", "Bearer " + accessToken)
 						.content(jsonBody)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON));
@@ -61,6 +79,8 @@ public class ProductResourceIT {
 	
 	@Test
 	public void updateShouldReturnProductDTOWhenIdExists() throws Exception{
+
+		String accessToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
 		
 		ProductDTO productDto = Factory.createProductDTO();
 		String jsonBody = objMapper.writeValueAsString(productDto);
@@ -70,6 +90,7 @@ public class ProductResourceIT {
 		
 		ResultActions result = 
 				mockMvc.perform(MockMvcRequestBuilders.put("/products/{id}", existingId)
+						.header("Authorization", "Bearer " + accessToken)
 						.content(jsonBody)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON));

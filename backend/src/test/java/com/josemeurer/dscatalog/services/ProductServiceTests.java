@@ -1,15 +1,17 @@
 package com.josemeurer.dscatalog.services;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.persistence.EntityNotFoundException;
-
+import com.josemeurer.dscatalog.dto.ProductDTO;
+import com.josemeurer.dscatalog.entities.Category;
+import com.josemeurer.dscatalog.entities.Product;
+import com.josemeurer.dscatalog.repositories.CategoryRepository;
+import com.josemeurer.dscatalog.repositories.ProductRepository;
+import com.josemeurer.dscatalog.services.exceptions.DatabaseException;
+import com.josemeurer.dscatalog.services.exceptions.ResourceNotFoundException;
+import com.josemeurer.dscatalog.tests.Factory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -21,14 +23,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.josemeurer.dscatalog.dto.ProductDTO;
-import com.josemeurer.dscatalog.entities.Category;
-import com.josemeurer.dscatalog.entities.Product;
-import com.josemeurer.dscatalog.repositories.CategoryRepository;
-import com.josemeurer.dscatalog.repositories.ProductRepository;
-import com.josemeurer.dscatalog.services.exceptions.DatabaseException;
-import com.josemeurer.dscatalog.services.exceptions.ResourceNotFoundException;
-import com.josemeurer.dscatalog.tests.Factory;
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(SpringExtension.class)
 public class ProductServiceTests {
@@ -73,12 +72,14 @@ public class ProductServiceTests {
 		Mockito.doThrow(DataIntegrityViolationException.class).when(repository).deleteById(dependentId); //teste para o futuro da aplicacao, quando tiver obj que depende do Product;
 		
 		//save, retornando um produto "que foi salvo";
-		Mockito.when(repository.save(ArgumentMatchers.any())).thenReturn(product);
+		Mockito.when(repository.save(any())).thenReturn(product);
 		
 		//findAll pageable, retornando uma page com um produto dentro;
-		Mockito.when(repository.findAll((Pageable)ArgumentMatchers.any())).thenReturn(page); 
+		Mockito.when(repository.findAll((Pageable) any())).thenReturn(page);
 		/* Quando o metodo aceita sobrecarga, precisa fazer um casting para especificar 
 		 * para o compilador qual sobrecarga utilizar */
+
+		Mockito.when(repository.find(any(),any(),any())).thenReturn(page);
 		
 		//findById, quando o id existe, retornando um optional com product dentro;
 		Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(product));
@@ -128,10 +129,10 @@ public class ProductServiceTests {
 		
 		Pageable pageable = PageRequest.of(0, 10); //Pagina 0, tamanho 10;
 		
-		Page<ProductDTO> result = service.findAllPaged(pageable);
+		Page<ProductDTO> result = service.findAllPaged(0L, "", pageable);
 		
 		Assertions.assertNotNull(result);
-		Mockito.verify(repository, Mockito.times(1)).findAll(pageable);
+		Mockito.verify(repository, Mockito.times(1)).find(null, "",pageable);
 	}
 	
 	@Test

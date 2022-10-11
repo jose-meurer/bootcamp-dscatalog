@@ -1,8 +1,9 @@
 package com.josemeurer.dscatalog.repositories;
 //boa pratica usar o mesmo caminho da pasta original no caminho de testes;
 
-import java.util.Optional;
-
+import com.josemeurer.dscatalog.dto.ProductDTO;
+import com.josemeurer.dscatalog.entities.Product;
+import com.josemeurer.dscatalog.tests.Factory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.EmptyResultDataAccessException;
 
-import com.josemeurer.dscatalog.dto.ProductDTO;
-import com.josemeurer.dscatalog.entities.Product;
-import com.josemeurer.dscatalog.tests.Factory;
+import java.util.Optional;
 
 @DataJpaTest
 public class ProductRepositoryTests {
@@ -31,7 +30,7 @@ public class ProductRepositoryTests {
 	void setUp() throws Exception {
 		existingId = 1L;
 		nonExistingId= 1000L;
-		countTotalProduct = 25L;
+		countTotalProduct = 26L;
 		
 		product = Factory.createProduct();
 		productDto = Factory.createProductDTO();

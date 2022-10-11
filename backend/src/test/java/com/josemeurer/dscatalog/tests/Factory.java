@@ -1,18 +1,18 @@
 package com.josemeurer.dscatalog.tests;
 
-import java.time.Instant;
-
 import com.josemeurer.dscatalog.dto.CategoryDTO;
 import com.josemeurer.dscatalog.dto.ProductDTO;
 import com.josemeurer.dscatalog.entities.Category;
 import com.josemeurer.dscatalog.entities.Product;
+
+import java.time.Instant;
 
 public class Factory {
 
 	
 	public static Product createProduct() {
 		Product p = new Product(1L, "Phone", "Good Phone", 800.0, "https://img.com/img.png", 
-				Instant.parse("2022-10-20T03:00:00Z"));
+				Instant.parse("2021-10-20T03:00:00Z"));
 		p.getCategories().add(createCategory());
 		return p;
 	}
